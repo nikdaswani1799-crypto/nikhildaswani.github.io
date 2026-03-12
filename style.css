@@ -1494,63 +1494,65 @@ button {
     }
 
     .scene {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.85rem;
-        align-content: start;
-        height: auto;
+        display: block;
+        height: 30rem;
         border-radius: 2rem;
-        padding: 1rem;
+        padding: 0;
     }
 
     .scene-monitor {
-        position: static;
-        order: 3;
-        grid-column: 1 / -1;
-        justify-self: center;
-        width: min(100%, 16.75rem);
-        height: 11.2rem;
-        margin-top: 0.15rem;
-        transform: rotate(-6deg);
+        position: absolute;
+        left: 50%;
+        top: 64%;
+        width: min(calc(100% - 2.8rem), 16.2rem);
+        height: 9.8rem;
+        margin-top: 0;
+        transform: translate(-50%, -44%) rotate(0deg);
     }
 
     .scene-shadow {
-        display: none;
+        display: block;
+        left: 50%;
+        bottom: 3rem;
+        width: 14rem;
+        height: 2rem;
+        transform: translateX(-50%);
     }
 
     .scene-note {
-        position: static;
-        order: 1;
-        width: auto;
-        padding: 0.95rem 0.95rem 1rem;
-        transform: none;
-        animation: none;
+        position: absolute;
+        top: 1rem;
+        left: 0.95rem;
+        width: 8.3rem;
+        padding: 0.9rem 0.9rem 0.95rem 0.95rem;
+        transform: rotate(-4deg);
+        animation: float-soft 8s ease-in-out infinite;
     }
 
     .scene-note strong {
-        font-size: 0.9rem;
+        font-size: 0.88rem;
     }
 
     .scene-card-focus {
-        position: static;
-        order: 2;
-        width: auto;
-        transform: none;
-        animation: none;
+        position: absolute;
+        top: 1.2rem;
+        right: 0.95rem;
+        width: 8.7rem;
+        transform: rotate(-2deg);
+        animation: float-soft 10s ease-in-out infinite reverse;
     }
 
     .scene-card-location {
-        position: static;
-        order: 4;
-        grid-column: 1 / -1;
-        justify-self: end;
-        width: min(100%, 8.9rem);
-        transform: none;
-        animation: none;
+        position: absolute;
+        right: 1rem;
+        top: 10rem;
+        width: 7rem;
+        transform: rotate(3deg);
+        animation: float-soft 8s ease-in-out infinite;
     }
 
     .scene-card {
-        padding: 0.95rem 1rem;
+        padding: 0.9rem 0.95rem;
     }
 
     .monitor-title {
