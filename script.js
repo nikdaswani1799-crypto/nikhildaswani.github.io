@@ -662,6 +662,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sections = [...document.querySelectorAll("main section[id]")];
     const scene = document.querySelector(".scene");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const experienceViewport = window.matchMedia("(max-width: 720px)");
 
     heroMetaRoot.innerHTML = heroMeta.map((item) => `
         <article class="meta-card">
@@ -722,20 +723,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
     experienceListRoot.innerHTML = experienceItems.map((item, index) => `
         <button class="experience-picker ${index === 0 ? "is-active" : ""}" type="button" data-company="${item.company}">
-            <div class="experience-picker-thumb">
-                <img src="${item.image}" alt="">
-            </div>
-            <div>
-                <p class="experience-meta">${item.period}</p>
-                <h3>${item.company}</h3>
-                <p class="experience-card-copy">${item.role}</p>
+            <div class="experience-flip-card">
+                <div class="experience-face experience-face-front">
+                    <div class="experience-picker-thumb">
+                        <img src="${item.image}" alt="${item.company} logo">
+                    </div>
+                    <div class="experience-front-copy">
+                        <p class="experience-meta">${item.period}</p>
+                        <h3>${item.company}</h3>
+                        <p class="experience-card-copy">${item.role}</p>
+                    </div>
+                    <span class="experience-flip-hint">Tap for details</span>
+                </div>
+                <div class="experience-face experience-face-back">
+                    <div class="experience-back-head">
+                        <p class="experience-meta">${item.period} / ${item.location}</p>
+                        <h3>${item.company}</h3>
+                        <p class="experience-card-copy">${item.role}</p>
+                    </div>
+                    <p class="experience-summary">${item.summary}</p>
+                    <ul class="experience-bullets">
+                        ${item.bullets.map((bullet) => `<li>${bullet}</li>`).join("")}
+                    </ul>
+                    <span class="experience-flip-hint">Tap to return</span>
+                </div>
             </div>
         </button>
     `).join("");
 
+    let activeExperienceCompany = experienceItems[0].company;
+
     renderExperienceFeature(experienceItems[0]);
 
-    [...experienceListRoot.querySelectorAll(".experience-picker")].forEach((button) => {
+    const experienceButtons = [...experienceListRoot.querySelectorAll(".experience-picker")];
+
+    const syncExperienceLayout = () => {
+        if (experienceViewport.matches) {
+            experienceButtons.forEach((picker) => {
+                picker.classList.remove("is-active");
+                picker.setAttribute("aria-expanded", String(picker.classList.contains("is-flipped")));
+            });
+
+            return;
+        }
+
+        const selected = experienceItems.find((item) => item.company === activeExperienceCompany) || experienceItems[0];
+
+        experienceButtons.forEach((picker) => {
+            const isActive = picker.dataset.company === selected.company;
+            picker.classList.remove("is-flipped");
+            picker.classList.toggle("is-active", isActive);
+            picker.setAttribute("aria-expanded", "false");
+        });
+
+        renderExperienceFeature(selected);
+    };
+
+    experienceButtons.forEach((button) => {
         button.addEventListener("click", () => {
             const company = button.dataset.company;
             const selected = experienceItems.find((item) => item.company === company);
@@ -744,13 +788,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            [...experienceListRoot.querySelectorAll(".experience-picker")].forEach((picker) => {
-                picker.classList.toggle("is-active", picker === button);
-            });
+            activeExperienceCompany = selected.company;
 
-            renderExperienceFeature(selected);
+            if (experienceViewport.matches) {
+                const shouldFlip = !button.classList.contains("is-flipped");
+
+                experienceButtons.forEach((picker) => {
+                    const isCurrent = picker === button && shouldFlip;
+                    picker.classList.toggle("is-flipped", isCurrent);
+                    picker.setAttribute("aria-expanded", String(isCurrent));
+                });
+
+                return;
+            }
+
+            syncExperienceLayout();
         });
     });
+
+    if (experienceViewport.addEventListener) {
+        experienceViewport.addEventListener("change", syncExperienceLayout);
+    } else {
+        experienceViewport.addListener(syncExperienceLayout);
+    }
+
+    syncExperienceLayout();
 
     toolboxGridRoot.innerHTML = toolboxGroups.map((group) => `
         <article class="tool-card reveal">
