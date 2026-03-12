@@ -1503,9 +1503,9 @@ button {
     .scene-monitor {
         position: absolute;
         left: 50%;
-        top: 64%;
-        width: min(calc(100% - 2.8rem), 16.2rem);
-        height: 9.8rem;
+        top: 70%;
+        width: 21rem;
+        height: 14.8rem;
         margin-top: 0;
         transform: translate(-50%, -44%) rotate(0deg);
     }
@@ -1523,7 +1523,7 @@ button {
         position: absolute;
         top: 1rem;
         left: 0.95rem;
-        width: 8.3rem;
+        width: 13.6rem;
         padding: 0.9rem 0.9rem 0.95rem 0.95rem;
         transform: rotate(-4deg);
         animation: float-soft 8s ease-in-out infinite;
@@ -1535,9 +1535,9 @@ button {
 
     .scene-card-focus {
         position: absolute;
-        top: 1.2rem;
-        right: 0.95rem;
-        width: 8.7rem;
+        top: 7.7rem;
+        right: 2.95rem;
+        width: 19.7rem;
         transform: rotate(-2deg);
         animation: float-soft 10s ease-in-out infinite reverse;
     }
@@ -1545,7 +1545,7 @@ button {
     .scene-card-location {
         position: absolute;
         right: 1rem;
-        top: 10rem;
+        top: 1rem;
         width: 7rem;
         transform: rotate(3deg);
         animation: float-soft 8s ease-in-out infinite;
